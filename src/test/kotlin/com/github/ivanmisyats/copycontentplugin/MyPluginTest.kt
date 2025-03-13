@@ -1,39 +1,45 @@
-package com.github.ivanmisyats.copycontentplugin
+package com.github.ivanmisyats.copycontentplugin;
 
-import com.intellij.ide.highlighter.XmlFileType
-import com.intellij.openapi.components.service
-import com.intellij.psi.xml.XmlFile
-import com.intellij.testFramework.TestDataPath
+import com.github.ivanmisyats.copycontentplugin.actions.CopyItemContentAction
+import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.actionSystem.impl.SimpleDataContext
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import com.intellij.util.PsiErrorElementUtil
-import com.github.ivanmisyats.copycontentplugin.services.MyProjectService
+import java.awt.Toolkit
+import java.awt.datatransfer.DataFlavor
 
-@TestDataPath("\$CONTENT_ROOT/src/test/testData")
 class MyPluginTest : BasePlatformTestCase() {
 
-    fun testXMLFile() {
-        val psiFile = myFixture.configureByText(XmlFileType.INSTANCE, "<foo>bar</foo>")
-        val xmlFile = assertInstanceOf(psiFile, XmlFile::class.java)
+    fun `test copy file content`() {
+        // 1. Create a test file in the fixture
+        val testContent = "Some sample content"
+        val psiFile = myFixture.configureByText("TestFile.txt", testContent)
 
-        assertFalse(PsiErrorElementUtil.hasErrors(project, xmlFile.virtualFile))
+        // 2. Create an AnActionEvent that references this file
+        val event = createActionEventForFile(psiFile.virtualFile)
 
-        assertNotNull(xmlFile.rootTag)
+        // 3. Invoke your action (replace with your actual class name)
+        val action = CopyItemContentAction()
+        action.actionPerformed(event)
 
-        xmlFile.rootTag?.let {
-            assertEquals("foo", it.name)
-            assertEquals("bar", it.value.text)
-        }
+        // 4. Check that the clipboard has the expected text
+        val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+        val copiedText = clipboard.getData(DataFlavor.stringFlavor) as String
+        assertTrue("Clipboard should contain file content", copiedText.contains(testContent))
     }
 
-    fun testRename() {
-        myFixture.testRename("foo.xml", "foo_after.xml", "a2")
+    private fun createActionEventForFile(file: VirtualFile): AnActionEvent {
+        val dataContext = SimpleDataContext.builder()
+            .add(CommonDataKeys.VIRTUAL_FILE, file)
+            .build()
+        // Create an instance of your action and provide a non-null "place" string.
+        val action = CopyItemContentAction()
+        return AnActionEvent.createFromAnAction(
+            action,
+            null,
+            "CopyItemContentAction", // Use a string identifier for the place
+            dataContext
+        )
     }
-
-    fun testProjectService() {
-        val projectService = project.service<MyProjectService>()
-
-        assertNotSame(projectService.getRandomNumber(), projectService.getRandomNumber())
-    }
-
-    override fun getTestDataPath() = "src/test/testData/rename"
 }

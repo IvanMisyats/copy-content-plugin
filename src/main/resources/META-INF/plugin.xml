@@ -1,18 +1,21 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.ivanmisyats.copycontentplugin</id>
-    <name>copy-content-plugin</name>
+    <name>Copy Item to Buffer</name>
     <vendor>ivanmisyats</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.ivanmisyats.copycontentplugin.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-    </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.ivanmisyats.copycontentplugin.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
-    </applicationListeners>
+    <actions>
+        <action
+                id="CopyFileContentAction"
+                class="com.github.ivanmisyats.copycontentplugin.actions.CopyItemContentAction"
+                text="Copy File/Folder Content to Buffer"
+                description="Copies the path and content of a file or folder to buffer">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt shift C"/>
+        </action>
+    </actions>
 </idea-plugin>
