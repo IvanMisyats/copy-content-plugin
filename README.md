@@ -1,4 +1,4 @@
-# copy-content-plugin
+# Copy Content to Clipboard Plugin for JetBrains IDEs
 
 ![Build](https://github.com/IvanMisyats/copy-content-plugin/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
@@ -17,11 +17,8 @@
 - [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
 
 <!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
-
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
-
-To keep everything working, do not remove `<!-- ... -->` sections. 
+This plugin copies the content of the selected items (files, directories) in the project view 
+to the clipboard. Later you may paste it to your favourite AI tool.
 <!-- Plugin description end -->
 
 ## Installation
