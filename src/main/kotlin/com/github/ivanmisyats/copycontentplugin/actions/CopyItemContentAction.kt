@@ -7,7 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 
-class CopyItemContentAction : AnAction("Copy File/Folder Content to Buffer") {
+class CopyItemContentAction : AnAction("Copy Content to the Clipboard") {
     override fun actionPerformed(e: AnActionEvent) {
         // Get all selected files/folders
         val virtualFiles = e.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY) ?: return

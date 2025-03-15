@@ -13,7 +13,7 @@
                 id="CopyFileContentAction"
                 class="com.github.ivanmisyats.copycontentplugin.actions.CopyItemContentAction"
                 text="Copy File/Folder Content to Buffer"
-                description="Copies the path and content of a file or folder to buffer">
+                description="Copies the path and content of a file or folder to the clipboard">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt shift C"/>
         </action>
