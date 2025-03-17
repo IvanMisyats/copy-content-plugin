@@ -29,6 +29,38 @@ class MyPluginTest : BasePlatformTestCase() {
         assertTrue("Clipboard should contain file content", copiedText.contains(testContent))
     }
 
+    fun `test file extension to language mapping`() {
+        // Create test files with different extensions
+        val javaFile = myFixture.configureByText("Test.java", "public class Test {}")
+        val kotlinFile = myFixture.configureByText("Test.kt", "class Test")
+        val unknownFile = myFixture.configureByText("Test.xyz", "some content")
+
+        // Create an action event with multiple files
+        val dataContext = SimpleDataContext.builder()
+            .add(CommonDataKeys.VIRTUAL_FILE_ARRAY, arrayOf(javaFile.virtualFile, kotlinFile.virtualFile, unknownFile.virtualFile))
+            .build()
+
+        val action = CopyItemContentAction()
+        val event = AnActionEvent.createFromAnAction(
+            action,
+            null,
+            "CopyItemContentAction",
+            dataContext
+        )
+
+        // Execute the action
+        action.actionPerformed(event)
+
+        // Check clipboard content
+        val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+        val copiedText = clipboard.getData(DataFlavor.stringFlavor) as String
+
+        // Verify correct language identifiers were used
+        assertTrue("Java file should be marked with java language", copiedText.contains("```java"))
+        assertTrue("Kotlin file should be marked with kotlin language", copiedText.contains("```kotlin"))
+        assertTrue("Unknown extension should have no language identifier", copiedText.contains("```\nsome content"))
+    }
+
     private fun createActionEventForFile(file: VirtualFile): AnActionEvent {
         val dataContext = SimpleDataContext.builder()
             .add(CommonDataKeys.VIRTUAL_FILE, file)

@@ -44,7 +44,9 @@ class CopyItemContentAction : AnAction("Copy Content to the Clipboard") {
     private fun processFile(file: VirtualFile, builder: StringBuilder) {
         if (!isTextFile(file)) return
         builder.append("${file.path}:\n")
-        builder.append("```\n")
+        val fileExtension = file.extension?.lowercase() ?: ""
+        val languageIdentifier = mapFileExtensionToLanguage(fileExtension)
+        builder.append("```$languageIdentifier\n")
         builder.append(getFileContent(file))
         builder.append("\n```\n\n")
     }
@@ -99,5 +101,48 @@ class CopyItemContentAction : AnAction("Copy Content to the Clipboard") {
         return descendantPath.startsWith(ancestorPath) &&
                 descendantPath != ancestorPath &&
                 descendantPath.substring(ancestorPath.length).startsWith("/")
+    }
+
+    /**
+     * Maps file extensions to language identifiers for code block formatting.
+     */
+    private fun mapFileExtensionToLanguage(extension: String): String {
+        val languageMap = mapOf(
+            // Common programming languages
+            "java" to "java",
+            "kt" to "kotlin",
+            "kts" to "kotlin",
+            "groovy" to "groovy",
+            "py" to "python",
+            "js" to "javascript",
+            "ts" to "typescript",
+            "html" to "html",
+            "xml" to "xml",
+            "json" to "json",
+            "yaml" to "yaml",
+            "yml" to "yaml",
+            "md" to "markdown",
+            "css" to "css",
+            "scss" to "scss",
+            "sql" to "sql",
+            "cs" to "csharp",
+            "php" to "php",
+            "rb" to "ruby",
+            "go" to "go",
+            "rs" to "rust",
+            "sh" to "bash",
+            "bat" to "batch",
+            "ps1" to "powershell",
+            "c" to "c",
+            "cpp" to "cpp",
+            "h" to "c",
+            "hpp" to "cpp",
+            "swift" to "swift",
+            "dart" to "dart",
+            "properties" to "properties",
+            "gradle" to "gradle",
+            "txt" to "text"
+        )
+        return if (languageMap.containsKey(extension)) "${languageMap[extension]}" else ""
     }
 }
